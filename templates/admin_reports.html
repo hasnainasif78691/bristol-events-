@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Reports - Bristol Community Events</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <nav>
+        <h1>Bristol Community Events</h1>
+        <div>
+            <a href="/">Home</a>
+            <a href="/events">Events</a>
+            <a href="/admin">Admin Panel</a>
+            <a href="/logout">Logout ({{ session['user_name'] }})</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h2>Admin Reports</h2>
+
+        <div class="admin-section">
+            <h3>Revenue and Bookings Per Event</h3>
+            <table class="bookings-table">
+                <thead>
+                    <tr>
+                        <th>Event Name</th>
+                        <th>Date</th>
+                        <th>Venue</th>
+                        <th>Total Bookings</th>
+                        <th>Revenue</th>
+                        <th>Total Tickets</th>
+                        <th>Tickets Remaining</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for report in event_reports %}
+                    <tr>
+                        <td>{{ report['event_name'] }}</td>
+                        <td>{{ report['event_date'] }}</td>
+                        <td>{{ report['venue_name'] }}</td>
+                        <td>{{ report['total_bookings'] or 0 }}</td>
+                        <td>£{{ "%.2f"|format(report['total_revenue'] or 0) }}</td>
+                        <td>{{ report['total_tickets'] }}</td>
+                        <td>{{ report['tickets_remaining'] }}</td>
+                        <td>
+                            {% if report['tickets_remaining'] == 0 %}
+                                <span style="color:red">Fully Booked</span>
+                            {% else %}
+                                <span style="color:green">Available</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <p><a href="/admin" class="btn">Back to Admin Panel</a></p>
+    </div>
+
+</body>
+</html>

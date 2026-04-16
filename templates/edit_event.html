@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Event - Bristol Community Events</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <nav>
+        <h1>Bristol Community Events</h1>
+        <div>
+            <a href="/">Home</a>
+            <a href="/events">Events</a>
+            <a href="/admin">Admin Panel</a>
+            <a href="/logout">Logout ({{ session['user_name'] }})</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="form-box">
+            <h2>Edit Event</h2>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form method="POST" action="/admin/edit-event/{{ event['event_id'] }}">
+                <div class="form-group">
+                    <label>Event Name</label>
+                    <input type="text" name="event_name" value="{{ event['event_name'] }}" required>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <input type="text" name="description" value="{{ event['description'] }}">
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <select name="category" required>
+                        <option value="Musical" {{ 'selected' if event['category'] == 'Musical' }}>Musical</option>
+                        <option value="Exhibition" {{ 'selected' if event['category'] == 'Exhibition' }}>Exhibition</option>
+                        <option value="Theatre" {{ 'selected' if event['category'] == 'Theatre' }}>Theatre</option>
+                        <option value="Sports" {{ 'selected' if event['category'] == 'Sports' }}>Sports</option>
+                        <option value="Workshop" {{ 'selected' if event['category'] == 'Workshop' }}>Workshop</option>
+                        <option value="Wedding" {{ 'selected' if event['category'] == 'Wedding' }}>Wedding</option>
+                        <option value="Religious" {{ 'selected' if event['category'] == 'Religious' }}>Religious</option>
+                        <option value="Conference" {{ 'selected' if event['category'] == 'Conference' }}>Conference</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Event Date</label>
+                    <input type="date" name="event_date" value="{{ event['event_date'] }}" required>
+                </div>
+                <div class="form-group">
+                    <label>Start Time</label>
+                    <input type="time" name="start_time" value="{{ event['start_time'] }}">
+                </div>
+                <div class="form-group">
+                    <label>Ticket Price (£)</label>
+                    <input type="number" name="ticket_price" step="0.01" min="0" value="{{ event['ticket_price'] }}" required>
+                </div>
+                <div class="form-group">
+                    <label>Total Tickets</label>
+                    <input type="number" name="total_tickets" min="1" value="{{ event['total_tickets'] }}" required>
+                </div>
+                <div class="form-group">
+                    <label>Last Booking Date</label>
+                    <input type="date" name="last_booking_date" value="{{ event['last_booking_date'] }}" required>
+                </div>
+                <div class="form-group">
+                    <label>Venue</label>
+                    <select name="venue_id" required>
+                        {% for venue in venues %}
+                            <option value="{{ venue['venue_id'] }}" {{ 'selected' if venue['venue_id'] == event['venue_id'] }}>{{ venue['venue_name'] }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="btn">Update Event</button>
+                <p><a href="/admin">Back to Admin Panel</a></p>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

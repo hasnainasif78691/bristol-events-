@@ -1,0 +1,14 @@
+HOW TO RUN THE BRISTOL COMMUNITY EVENTS WEBSITE
+
+1. Make sure MySQL is running (System Settings > MySQL > Start)
+2. Open terminal and navigate to the bristol-events folder
+3. Run: source venv/bin/activate
+4. Run: python3 app.py
+5. Open browser and go to: http://127.0.0.1:5000
+
+TEST ACCOUNTS:
+Admin: admin@bce.com / admin123
+Standard User: (use the register page to create one)
+
+DATABASE:
+Import bristol_events_dump.sql into MySQL to set up the database

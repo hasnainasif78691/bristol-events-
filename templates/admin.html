@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Bristol Community Events</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <nav>
+        <h1>Bristol Community Events</h1>
+        <div>
+            <a href="/">Home</a>
+            <a href="/events">Events</a>
+            <a href="/admin">Admin Panel</a>
+            <a href="/logout">Logout ({{ session['user_name'] }})</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h2>Admin Dashboard</h2>
+        <a href="/admin/reports" class="btn">View Reports</a>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="admin-stats">
+            <div class="stat-card">
+                <h3>Total Confirmed Bookings</h3>
+                <p>{{ total_bookings['total_bookings'] }}</p>
+            </div>
+            <div class="stat-card">
+                <h3>Total Revenue</h3>
+                <p>£{{ "%.2f"|format(total_revenue['total_revenue'] or 0) }}</p>
+            </div>
+            <div class="stat-card">
+                <h3>Total Events</h3>
+                <p>{{ events|length }}</p>
+            </div>
+            <div class="stat-card">
+                <h3>Total Users</h3>
+                <p>{{ users|length }}</p>
+            </div>
+        </div>
+
+        <div class="admin-section">
+            <div class="admin-section-header">
+                <h3>Manage Events</h3>
+                <a href="/admin/add-event" class="btn">Add New Event</a>
+            </div>
+            <table class="bookings-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Event Name</th>
+                        <th>Category</th>
+                        <th>Date</th>
+                        <th>Venue</th>
+                        <th>Price</th>
+                        <th>Tickets Left</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for event in events %}
+                    <tr>
+                        <td>{{ event['event_id'] }}</td>
+                        <td>{{ event['event_name'] }}</td>
+                        <td>{{ event['category'] }}</td>
+                        <td>{{ event['event_date'] }}</td>
+                        <td>{{ event['venue_name'] }}</td>
+                        <td>£{{ event['ticket_price'] }}</td>
+                        <td>{{ event['tickets_remaining'] }}</td>
+                        <td>
+                            <a href="/admin/edit-event/{{ event['event_id'] }}" class="btn">Edit</a>
+                            <a href="/admin/delete-event/{{ event['event_id'] }}" class="btn btn-cancel">Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="admin-section">
+            <h3>Manage Users</h3>
+            <table class="bookings-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Student</th>
+                        <th>Admin</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user['user_id'] }}</td>
+                        <td>{{ user['first_name'] }} {{ user['last_name'] }}</td>
+                        <td>{{ user['email'] }}</td>
+                        <td>{{ 'Yes' if user['is_student'] else 'No' }}</td>
+                        <td>{{ 'Yes' if user['is_admin'] else 'No' }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>

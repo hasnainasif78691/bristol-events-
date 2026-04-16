@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bristol Community Events</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<nav>
+    <h1>Bristol Community Events</h1>
+    <div>
+        <a href="/">Home</a>
+        <a href="/events">Events</a>
+        {% if session['user_id'] %}
+            <a href="/my-bookings">My Bookings</a>
+            <a href="/update-password">Update Password</a>
+            {% if session['is_admin'] %}
+                <a href="/admin">Admin Panel</a>
+            {% endif %}
+            <a href="/logout">Logout ({{ session['user_name'] }})</a>
+        {% else %}
+            <a href="/login">Login</a>
+            <a href="/register">Register</a>
+        {% endif %}
+    </div>
+</nav>
+
+    <div class="hero">
+        <h2>Welcome to Bristol Community Events</h2>
+        <p>Find and book events happening in Bristol</p>
+    </div>
+
+    <div class="container">
+        <p>Browse upcoming events in Bristol including music, sports, exhibitions and many more.</p>
+    </div>
+
+</body>
+</html>

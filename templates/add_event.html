@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Event - Bristol Community Events</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <nav>
+        <h1>Bristol Community Events</h1>
+        <div>
+            <a href="/">Home</a>
+            <a href="/events">Events</a>
+            <a href="/admin">Admin Panel</a>
+            <a href="/logout">Logout ({{ session['user_name'] }})</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="form-box">
+            <h2>Add New Event</h2>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form method="POST" action="/admin/add-event">
+                <div class="form-group">
+                    <label>Event Name</label>
+                    <input type="text" name="event_name" required>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <input type="text" name="description">
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <select name="category" required>
+                        <option value="Musical">Musical</option>
+                        <option value="Exhibition">Exhibition</option>
+                        <option value="Theatre">Theatre</option>
+                        <option value="Sports">Sports</option>
+                        <option value="Workshop">Workshop</option>
+                        <option value="Wedding">Wedding</option>
+                        <option value="Religious">Religious</option>
+                        <option value="Conference">Conference</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Event Date</label>
+                    <input type="date" name="event_date" required>
+                </div>
+                <div class="form-group">
+                    <label>Start Time</label>
+                    <input type="time" name="start_time">
+                </div>
+                <div class="form-group">
+                    <label>Ticket Price (£)</label>
+                    <input type="number" name="ticket_price" step="0.01" min="0" value="0" required>
+                </div>
+                <div class="form-group">
+                    <label>Total Tickets</label>
+                    <input type="number" name="total_tickets" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label>Last Booking Date</label>
+                    <input type="date" name="last_booking_date" required>
+                </div>
+                <div class="form-group">
+                    <label>Venue</label>
+                    <select name="venue_id" required>
+                        {% for venue in venues %}
+                            <option value="{{ venue['venue_id'] }}">{{ venue['venue_name'] }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="btn">Add Event</button>
+                <p><a href="/admin">Back to Admin Panel</a></p>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>
